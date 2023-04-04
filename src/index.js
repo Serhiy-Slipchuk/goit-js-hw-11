@@ -6,7 +6,7 @@ import Notiflix from "notiflix";
 import { getPictures, total } from "./js/clientAPI";
 import { clearImages, galleryListEl, renderImages } from "./js/renderMarkup";
 
-const lightbox = new  SimpleLightbox('.gallery a', {/* options */});
+const lightbox = new  SimpleLightbox('.gallery a');
 
 const searchFormEl = document.querySelector('#search-form');
 const buttonLoadMoreEl = document.querySelector('.load-more');
@@ -38,6 +38,7 @@ function handlerLoadMoreButton() {
     getPictures(searchRequest, page).then(data => {
         renderImages(data);
         scrollToLoadedImages();
+        lightbox.refresh();
         page = page + 1;
     }).catch(error => {
         console.log(error);
