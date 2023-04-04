@@ -23,6 +23,7 @@ function formSubmitHandler (event) {
     page = 1;
     getPictures(searchRequest, 1).then(data => {
         renderImages(data);
+        lightbox.refresh();
         if (total > 40) {
             displayLoadMoreButton();
         };
@@ -40,9 +41,7 @@ function handlerLoadMoreButton() {
     getPictures(searchRequest, page).then(data => {
         renderImages(data);
         scrollToLoadedImages();
-        console.log(lightbox.loadedImages);
         lightbox.refresh();
-        console.log(lightbox.loadedImages);
         page = page + 1;
     }).catch(error => {
         console.log(error);
