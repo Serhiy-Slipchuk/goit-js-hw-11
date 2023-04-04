@@ -6,7 +6,7 @@ import Notiflix from "notiflix";
 import { getPictures, total } from "./js/clientAPI";
 import { clearImages, galleryListEl, renderImages } from "./js/renderMarkup";
 
-const lightbox = new  SimpleLightbox('.gallery a');
+const lightbox = new SimpleLightbox('.gallery a');
 
 const searchFormEl = document.querySelector('#search-form');
 const buttonLoadMoreEl = document.querySelector('.load-more');
@@ -22,8 +22,10 @@ function formSubmitHandler (event) {
     searchRequest = searchFormEl.searchQuery.value.toLowerCase();
     page = 1;
     getPictures(searchRequest, 1).then(data => {
-        renderImages (data);
-        displayLoadMoreButton();
+        renderImages(data);
+        if (total > 40) {
+            displayLoadMoreButton();
+        };
         Notiflix.Notify.success(`Hooray! We found ${total} images.`);
         page = 2;
     }).catch(error => {
@@ -38,7 +40,9 @@ function handlerLoadMoreButton() {
     getPictures(searchRequest, page).then(data => {
         renderImages(data);
         scrollToLoadedImages();
+        console.log(lightbox.loadedImages);
         lightbox.refresh();
+        console.log(lightbox.loadedImages);
         page = page + 1;
     }).catch(error => {
         console.log(error);
