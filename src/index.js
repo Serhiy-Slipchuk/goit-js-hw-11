@@ -17,7 +17,12 @@ searchFormEl.addEventListener('submit', formSubmitHandler);
 function formSubmitHandler (event) {
     event.preventDefault();
     clearImages();
-    searchRequest = searchFormEl.searchQuery.value.toLowerCase();
+    hideLoadMoreButton();
+    searchRequest = searchFormEl.searchQuery.value.toLowerCase().trim();
+    if(searchRequest === '') {
+        Notiflix.Notify.failure('Input valid search query. Please try again.');
+        return;
+    }
     page = 1;
     getPictures(searchRequest, 1).then(data => {
         renderImages(data);
@@ -64,9 +69,9 @@ function hideLoadMoreButton() {
 }
 
 function scrollToLoadedImages() {
-    const cardHeight = galleryListEl.firstElementChild.getBoundingClientRect().height;
+    const buttonHeight = document.querySelector('.button-thumb').getBoundingClientRect().height;
     window.scrollBy({
-        top: cardHeight * 2.8,
+        top: window.innerHeight - buttonHeight + 15,
         behavior: "smooth",
     });
 }
