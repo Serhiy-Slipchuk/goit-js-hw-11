@@ -1,6 +1,7 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import Notiflix from "notiflix";
+import debounce from "lodash.debounce";
 import { getPictures, total } from "./js/clientAPI";
 import { clearImages, galleryListEl, renderImages } from "./js/renderMarkup";
 
@@ -8,11 +9,14 @@ const lightbox = new SimpleLightbox('.gallery a');
 
 const searchFormEl = document.querySelector('#search-form');
 const buttonLoadMoreEl = document.querySelector('.load-more');
+const toTopButtonEl = document.querySelector('#toTopButton');
 
 let page = 1;
 let searchRequest = '';
 
 searchFormEl.addEventListener('submit', formSubmitHandler);
+window.addEventListener('scroll', debounce(windowScrollHahdler, 300));
+toTopButtonEl.addEventListener('click', clickOnTopButton);
 
 function formSubmitHandler (event) {
     event.preventDefault();
@@ -74,4 +78,16 @@ function scrollToLoadedImages() {
         top: window.innerHeight - buttonHeight + 15,
         behavior: "smooth",
     });
+}
+
+function windowScrollHahdler() {
+    if (document.documentElement.scrollTop > 20) {
+        toTopButtonEl.style.display = "block";
+      } else {
+        toTopButtonEl.style.display = "none";
+      }
+}
+
+function clickOnTopButton() {
+    document.documentElement.scrollTop = 0;
 }
